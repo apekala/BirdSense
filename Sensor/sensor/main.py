@@ -8,9 +8,11 @@ if __name__ == '__main__':
     min_conf = 0.5
 
     analyzer = BirdNetController(lat=lat, lon=lon, min_conf=min_conf)
-    rec, sr = record_sound(seconds=3)
-    print("recording...")
-    start = time.time()
-    det = analyzer.analyze(rec, sr)
-    print('analysis time: ', time.time() - start)
-    print(det)
+
+    while True:
+        rec, sr = record_sound(seconds=3)
+        print("recording...")
+        start = time.time()
+        det = analyzer.analyze(rec, sr)
+        print('analysis time: ', time.time() - start)
+        print(det)
