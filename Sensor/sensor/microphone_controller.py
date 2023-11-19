@@ -1,10 +1,12 @@
 import sounddevice as sd
 from scipy.io.wavfile import write
+import time
 
-
-def record_sound(fs=44100, seconds=3):
+def record_sound(seconds, fs=44100):
+    start = time.time()
     myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=1)
     sd.wait()  # Wait until recording is finished
+    end = time.time()
     write('output.wav', fs, myrecording)  # Save as WAV file
-    # print(myrecording.flatten())
-    return myrecording.flatten(), fs
+
+    return myrecording.flatten(), fs, start, end
