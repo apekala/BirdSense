@@ -17,7 +17,7 @@ class BottomBar extends HookWidget{
   }
   final screens = [
      const BirdPage(),
-     const MapPage(),
+      const MapPage(),
     const WeatherPage(),
     const ArticlesPage(),
   ];

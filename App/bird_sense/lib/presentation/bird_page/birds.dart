@@ -20,7 +20,7 @@ class BirdPage extends HookWidget{
         length: 3,
         child: Scaffold(
           appBar: AppBar(
-            toolbarHeight: 300,
+            toolbarHeight: 150,
             elevation: 0,
             backgroundColor: BSColors.backgroundColor ,
             bottom:  TabBar(
@@ -32,11 +32,13 @@ class BirdPage extends HookWidget{
                 Tab(icon: Icon(Icons.menu_book)),
               ],
             ),
-            title: Stack(
-              children:[
-              Image.asset('assets/birdSense(1).png', fit: BoxFit.fitHeight),
-              ]
-              )
+            title: Center(child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [Text('Bird',style: TextStyle(color: BSColors.primaryColor, fontSize: 25, fontStyle: FontStyle.italic),),
+                Image.asset('assets/birdSense(2).png', height: 150,),
+                Text('Sense', style: TextStyle(color: BSColors.primaryColor, fontSize: 25, fontStyle: FontStyle.italic),)
+              ],
+            ))
           ),
           body: TabBarView(
             children: screens
