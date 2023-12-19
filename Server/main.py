@@ -30,22 +30,21 @@ async def upload_detections_from_ttn(request: Request):
     sensor_data = json.loads(sensor_data.replace("'", "\""))
     print(type(sensor_data))
 
+
+    rec_length = 3
     for det in sensor_data:
         detection = DetectionModel(
             dev_eui=dev_eui,
             species=det['scientific_name'],
             confidence=float(det['confidence']),
-            start_time=float(det['start_time']),
-            end_time=float(det['end_time'])
+            start_time=int(det['end_time']-rec_length),
+            end_time=int(det['end_time'])
         )
 
         db.insert_detection(detection)
 
 
-@app.get('/detections', response_model=DetectionModel)
-async def get_all_detections():
-    return db.get_all_detections()
+@app.get('/detections', response_model=list[DetectionModel])
+async def get_all_detections(after: int = 0):
+    return db.get_all_detections(after)
 
-# @app.get('/users', response_model=UserModel)
-# async def get_users():
-#     return db.get_users()

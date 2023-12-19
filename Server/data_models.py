@@ -12,12 +12,11 @@ class DeviceModel:
 
 @dataclass
 class DetectionModel:
-    dev_eui: str
     species: str
     confidence: float
-    start_time: float
-    end_time: float
+    start_time: int
+    end_time: int
+    dev_eui: str
 
 if __name__ == '__main__':
-    u = UserModel(2137, "jp2gmd")
-    print(vars(u))
+    pass

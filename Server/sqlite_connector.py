@@ -27,8 +27,11 @@ class SqliteConnector:
         self._cur.execute(query)
         self._con.commit()
 
-    def get_all_detections(self):
-        query = f"""SELECT * FROM detections"""
+    def get_all_detections(self, after):
+        query = f"""SELECT * FROM detections
+        where end_time>{after}
+         order by end_time desc
+        """
         logging.info(f"running query:\n{query}")
         res = self._cur.execute(query)
         # print(res.fetchall())

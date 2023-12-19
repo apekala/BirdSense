@@ -1,7 +1,7 @@
 import datetime
-import multiprocessing
 import time
 import logging
+import json
 from multiprocessing import Process, Queue
 
 from microphone_controller import record_sound
@@ -16,9 +16,17 @@ def analyze(sound_samples, detections):
     analyzer = BirdNetController(lat=lat, lon=lon, min_conf=min_conf)
     while True:
         rec, sr, rec_start, rec_end = sound_samples.get()
-        det = analyzer.analyze(rec, sr)
+        analyzer_out = analyzer.analyze(rec, sr)
 
-        detections.put(det)
+        result = [{
+            'scientific_name': det['scientific_name'],
+            'confidence': round(det['confidence'],2),
+            # 'start_time': int(round(rec_start)),
+            'end_time': int(round(rec_end))
+        } for det in analyzer_out]
+
+        logging.info(f"detected {[det['label'] for det in analyzer_out]}")
+        detections.put(result)
 
 def send(detections: Queue):
     MAX_MSG_SIZE = 242
@@ -33,7 +41,6 @@ def send(detections: Queue):
         while not (q.empty() or len(str(res + (last_element_buffer := q.get()))) > MAX_MSG_SIZE):
             res += last_element_buffer
             last_element_buffer = None
-
         return res
 
 
@@ -59,8 +66,8 @@ if __name__ == '__main__':
     sender = Process(target=send, args=(detections,))
     sender.start()
 
+    print("recording...")
     # record sound and pass it in samples to analyzer
     while True:
-        print("recording...")
         rec_data = record_sound(seconds=3)
         sound_samples.put(rec_data)
