@@ -25,8 +25,9 @@ def analyze(sound_samples, detections):
             'end_time': int(round(rec_end))
         } for det in analyzer_out]
 
-        logging.info(f"detected {[det['label'] for det in analyzer_out]}")
-        detections.put(result)
+        if result:
+            logging.info(f"detected {[det['label'] for det in analyzer_out]}")
+            detections.put(result)
 
 def send(detections: Queue):
     MAX_MSG_SIZE = 242

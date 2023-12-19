@@ -44,7 +44,7 @@ async def upload_detections_from_ttn(request: Request):
         db.insert_detection(detection)
 
 
-@app.get('/detections', response_model=list[DetectionModel])
+@app.get('/v1/detections', response_model=list[DetectionModel])
 async def get_all_detections(after: int = 0):
     return db.get_all_detections(after)
 

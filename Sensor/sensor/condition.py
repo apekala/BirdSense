@@ -1,4 +1,4 @@
-import bme280
+import bme2801702985548
 import smbus2
 
 
