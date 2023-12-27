@@ -7,6 +7,5 @@ def record_sound(seconds, fs=44100):
     myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=1)
     sd.wait()  # Wait until recording is finished
     end = time.time()
-    write('output.wav', fs, myrecording)  # Save as WAV file
-
+    # write('output.wav', fs, myrecording)  # Save as WAV file
     return myrecording.flatten(), fs, start, end
