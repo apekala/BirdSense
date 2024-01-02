@@ -1,13 +1,10 @@
 #  ngrok http  --domain=saving-crow-bursting.ngrok-free.app 127.0.0.1:8000
 import logging
-from fastapi import FastAPI, Request
-from pydantic import BaseModel
-from typing import Any
-import json
-from base64 import b64decode
 
-from server.sqlite_connector import SqliteConnector
+from fastapi import FastAPI, Request
+
 from server.data_models import *
+from server.sqlite_connector import SqliteConnector
 
 app = FastAPI()
 
@@ -36,7 +33,7 @@ async def upload_detections_from_ttn(request: Request):
             dev_eui=dev_eui,
             species=det['species'],
             confidence=float(det['confidence']),
-            start_time=int(det['end_time'])-rec_length,
+            start_time=int(det['end_time']) - rec_length,
             end_time=int(det['end_time'])
         )
 
@@ -46,4 +43,3 @@ async def upload_detections_from_ttn(request: Request):
 @app.get('/v1/detections', response_model=list[DetectionModel])
 async def get_all_detections(after: int = 0):
     return db.get_all_detections(after)
-

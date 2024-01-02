@@ -1,9 +1,9 @@
 import logging
-
-import serial
+import os
 import time
 
-import os
+import serial
+
 from sensor.communication.lora_exceptions import JoinError
 
 

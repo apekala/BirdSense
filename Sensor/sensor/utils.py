@@ -1,6 +1,7 @@
-from contextlib import contextmanager
 import os
 import sys
+from contextlib import contextmanager
+
 
 @contextmanager
 def suppress_stdout():

@@ -1,17 +1,13 @@
-import datetime
-import time
 import logging
-import json
+import time
 from multiprocessing import Process, Queue
 
-from sensor.microphone_controller import record_sound
 from sensor.birdnet_controller import BirdNetController
-from sensor.communication.lora import LoRaConnection
-from sensor.communication.lora_exceptions import JoinError
 from sensor.communication.http_connection import HTTPConnection
-from sensor.utils import *
-from sensor.message_composer import MessageComposer
 from sensor.detection import Detection
+from sensor.message_composer import MessageComposer
+from sensor.microphone_controller import record_sound
+
 
 def analyze(sound_samples, detections):
     lat, lon = 52.21885, 21.01077
@@ -23,12 +19,11 @@ def analyze(sound_samples, detections):
         if not analyzer_out:
             continue
 
-        det = analyzer_out[0]# len of list should be 1 because recording length is equal to analyzed time (3s)
+        det = analyzer_out[0]  # len of list should be 1 because recording length is equal to analyzed time (3s)
         result = Detection(
             species=det['scientific_name'],
             confidence=round(det['confidence'], 2),
             end_time=int(round(rec_end)))
-
 
         if result:
             logging.info(f"detected {[det['label'] for det in analyzer_out]}")

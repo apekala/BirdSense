@@ -37,6 +37,7 @@ class SqliteConnector:
         # print(res.fetchall())
         return [DetectionModel(*args[1:]) for args in res.fetchall()]
 
+
 if __name__ == '__main__':
     db = SqliteConnector()
     print(db.get_all_detections())

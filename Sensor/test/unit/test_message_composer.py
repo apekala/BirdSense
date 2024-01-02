@@ -1,11 +1,10 @@
-import unittest
-from unittest.mock import MagicMock, patch
-
-from multiprocessing import Queue
 import time
+import unittest
+from multiprocessing import Queue
+from unittest.mock import MagicMock
 
-from sensor.message_composer import MessageComposer
 from sensor.detection import Detection
+from sensor.message_composer import MessageComposer
 
 
 class TestMessageComposer(unittest.TestCase):
@@ -41,7 +40,8 @@ class TestMessageComposer(unittest.TestCase):
         expected = "n;0.5;1\nn;0.5;2\n"
         self.assertEqual(expected, result)
 
-    def test_given_queue_longer_than_max_message_len_when_dump_detections_queue_called_twice_then_detections_retuned_in_second_message(self):
+    def test_given_queue_longer_than_max_message_len_when_dump_detections_queue_called_twice_then_detections_retuned_in_second_message(
+            self):
         q = Queue()
         q.put(Detection('n', 0.5, 1))
         q.put(Detection('n', 0.5, 2))
@@ -72,6 +72,7 @@ class TestMessageComposer(unittest.TestCase):
         result = composer.compose()
 
         self.assertIsNone(result)
+
 
 if __name__ == '__main__':
     unittest.main()

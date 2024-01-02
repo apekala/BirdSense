@@ -1,6 +1,6 @@
-import sounddevice as sd
-from scipy.io.wavfile import write
 import time
+
+import sounddevice as sd
 
 
 def record_sound(seconds, fs=44100):

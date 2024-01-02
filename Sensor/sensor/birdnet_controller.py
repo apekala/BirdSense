@@ -1,5 +1,6 @@
-from birdnetlib.analyzer import Analyzer
 from datetime import datetime
+
+from birdnetlib.analyzer import Analyzer
 from numpy import ndarray
 
 from .recording import Recording

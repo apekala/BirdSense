@@ -7,7 +7,6 @@ class MessageComposer:
         self.detections = detections
         self._last_element_buffer = None
 
-
     def _to_csv(self, data: list):
         pass
 

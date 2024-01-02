@@ -1,8 +1,8 @@
+import json
 import logging
+from base64 import b64encode
 
 import requests
-from base64 import b64encode
-import json
 
 
 class HTTPConnection():
@@ -24,6 +24,7 @@ class HTTPConnection():
         except requests.exceptions.ConnectionError:
             logging.error("Connection with server unsuccessful. Pretending to send message...")
         logging.info(data_json)
+
 
 if __name__ == '__main__':
     con = HTTPConnection()
