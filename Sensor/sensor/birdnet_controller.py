@@ -1,9 +1,10 @@
-from birdnetlib.analyzer import Analyzer
 from datetime import datetime
+
+from birdnetlib.analyzer import Analyzer
 from numpy import ndarray
 
-from recording import Recording
-from utils import *
+from .recording import Recording
+from .utils import *
 
 
 class BirdNetController:
@@ -15,7 +16,13 @@ class BirdNetController:
         # Load and initialize the BirdNET-Analyzer models.
         self.analyzer = Analyzer()
 
-    def analyze(self, recording: ndarray, sr: int):
+    def analyze(self, recording: ndarray, sr: int) -> list[dict]:
+        """
+        Detects bird species from sound recording
+        :param recording: recording
+        :param sr: sample rate
+        :return: detections
+        """
         recording = Recording(
             recording=recording,
             sample_rate=sr,

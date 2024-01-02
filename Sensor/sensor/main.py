@@ -1,13 +1,12 @@
-import datetime
-import time
 import logging
-import json
+import time
 from multiprocessing import Process, Queue
 
-from microphone_controller import record_sound
-from birdnet_controller import BirdNetController
-from communication.lora import LoRaConnection
-from utils import *
+from sensor.birdnet_controller import BirdNetController
+from sensor.communication.http_connection import HTTPConnection
+from sensor.detection import Detection
+from sensor.message_composer import MessageComposer
+from sensor.microphone_controller import record_sound
 
 
 def analyze(sound_samples, detections):
@@ -17,41 +16,33 @@ def analyze(sound_samples, detections):
     while True:
         rec, sr, rec_start, rec_end = sound_samples.get()
         analyzer_out = analyzer.analyze(rec, sr)
+        if not analyzer_out:
+            continue
 
-        result = [{
-            'scientific_name': det['scientific_name'],
-            'confidence': round(det['confidence'],2),
-            # 'start_time': int(round(rec_start)),
-            'end_time': int(round(rec_end))
-        } for det in analyzer_out]
+        det = analyzer_out[0]  # len of list should be 1 because recording length is equal to analyzed time (3s)
+        result = Detection(
+            species=det['scientific_name'],
+            confidence=round(det['confidence'], 2),
+            end_time=int(round(rec_end)))
 
         if result:
             logging.info(f"detected {[det['label'] for det in analyzer_out]}")
             detections.put(result)
+            print(result)
+
 
 def send(detections: Queue):
     MAX_MSG_SIZE = 242
 
-    lora = LoRaConnection('/dev/ttyUSB0')
+    # lora = LoRaConnection('/dev/ttyUSB0')
+    lora = HTTPConnection()
 
-    def dump_queue(q, last_element_buffer):
-        res = []
-        if last_element_buffer:
-            res += last_element_buffer
+    message_composer = MessageComposer(detections, MAX_MSG_SIZE)
 
-        while not (q.empty() or len(str(res + (last_element_buffer := q.get()))) > MAX_MSG_SIZE):
-            res += last_element_buffer
-            last_element_buffer = None
-        return res
-
-
-    last_element_buffer = None
     while True:
-        if message := dump_queue(detections, last_element_buffer):
-            logging.info(f"seending message (): {message} msg len: {len(str(message))}")
-            logging.warning(f"there are {detections.qsize() + 1 if last_element_buffer else detections.qsize()} unsent messages")
+        if message := message_composer.compose():
             lora.send(message)
-            time.sleep(1)
+        time.sleep(0.1)
 
 
 if __name__ == '__main__':

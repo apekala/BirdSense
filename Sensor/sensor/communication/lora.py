@@ -1,12 +1,15 @@
 import logging
+import os
+import time
 
 import serial
-import time
 
 from sensor.communication.lora_exceptions import JoinError
 
+
 class LoRaConnection:
     def __init__(self, port):
+        os.system(f'sudo chmod 666 {port}')
         self._ser = serial.Serial(port=port, baudrate=9600, timeout=5)
         self._join()
 
@@ -29,7 +32,7 @@ class LoRaConnection:
                 lines.append(line)
         print("Joined LoRa network")
 
-    def send(self, message, timeout = 15):
+    def send(self, message, timeout=15):
         """
         send a message
         :param message: message
@@ -56,4 +59,4 @@ if __name__ == '__main__':
     logging.basicConfig(level=logging.INFO)
     lora = LoRaConnection("/dev/ttyUSB0")
     # lora.send("hello")
-    lora.send("a"*10)
+    lora.send("a" * 10)
