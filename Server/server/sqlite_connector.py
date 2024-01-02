@@ -1,7 +1,7 @@
 import logging
 import sqlite3
 
-from data_models import *
+from server.data_models import *
 
 
 class SqliteConnector:
@@ -32,7 +32,7 @@ class SqliteConnector:
         where end_time>{after}
          order by end_time desc
         """
-        logging.info(f"running query:\n{query}")
+        # logging.info(f"running query:\n{query}")
         res = self._cur.execute(query)
         # print(res.fetchall())
         return [DetectionModel(*args[1:]) for args in res.fetchall()]
