@@ -40,6 +40,7 @@ dependencies:
     git:
       url: https://github.com/fleaflet/flutter_map.git
   latlong2: ^0.9.0
+  timer_builder: ^2.0.0
   #flutter_osm_plugin: ^0.70.3
   #latlong: ^0.6.1
   #flutter_map: any

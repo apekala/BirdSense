@@ -4,7 +4,7 @@ import 'package:bird_sense/presentation/map.dart';
 import 'package:bird_sense/presentation/weather.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
-import 'package:bird_sense/data/core/model/color.dart';
+import 'package:bird_sense/data/model/color.dart';
 
 class BottomBar extends HookWidget{
   const BottomBar({Key? key,}) : super(key : key);
