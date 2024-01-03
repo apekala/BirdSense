@@ -7,9 +7,6 @@ class MessageComposer:
         self.detections = detections
         self._last_element_buffer = None
 
-    def _to_csv(self, data: list):
-        pass
-
     def _dump_detections_queue(self):
         """
         returns content of a multiprocessing.Queue without exceedeing max message size (bytes).

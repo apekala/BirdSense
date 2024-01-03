@@ -15,7 +15,7 @@ class TestMessageComposer(unittest.TestCase):
 
         composer = MessageComposer(q, 100)
         result = composer._dump_detections_queue()
-        self.assertEqual("n;0.5;1\n", result)
+        self.assertEqual("n,0.5,1;", result)
 
     def test_given_non_empty_short_queue_when_dump_detections_queue_called_then_last_element_buffer_is_None(self):
         q = Queue()
@@ -37,7 +37,7 @@ class TestMessageComposer(unittest.TestCase):
         composer = MessageComposer(q, 20)
         result = composer._dump_detections_queue()
 
-        expected = "n;0.5;1\nn;0.5;2\n"
+        expected = "n,0.5,1;n,0.5,2;"
         self.assertEqual(expected, result)
 
     def test_given_queue_longer_than_max_message_len_when_dump_detections_queue_called_twice_then_detections_retuned_in_second_message(
@@ -52,7 +52,7 @@ class TestMessageComposer(unittest.TestCase):
         composer._dump_detections_queue()
         result = composer._dump_detections_queue()
 
-        expected = "n;0.5;3\n"
+        expected = "n,0.5,3;"
         self.assertEqual(expected, result)
 
     # @patch('MessageComposer._dump_detections_queue')
