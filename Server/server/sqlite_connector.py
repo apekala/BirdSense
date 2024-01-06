@@ -1,4 +1,3 @@
-import logging
 import sqlite3
 
 from server.data_models import *
@@ -10,16 +9,48 @@ class SqliteConnector:
         self._cur = self._con.cursor()
 
     def insert_detection(self, detection: DetectionModel):
-        query = f"""INSERT INTO detections 
-        VALUES (NULL,
-        "{detection.species}",
-        {detection.confidence}, 
-        {detection.start_time}, 
-        {detection.end_time}, 
-        "{detection.dev_eui}")
+        """
+        Save detection in DB.
+
+        If a species is detected 2 times on a single device in short period of time existing record is updated instead of adding a new record.
+        Start and end times are updated to include both detections and confidence is set to max of both confidence scores.
+        :param detection: Detection data.
         """
 
-        logging.info(f"running query:\n{query}")
+        MIN_TIME_BETWEEN_DETECTIONS = 60
+
+        # update start_time, end_time and accuracy if a species is detected 2 times on a single device in short period of time
+        query = f"""
+            update detections
+            set start_time = min({detection.start_time}, start_time),
+                end_time = max({detection.end_time}, end_time),
+                confidence = max({detection.confidence}, confidence)
+            where dev_eui = "{detection.dev_eui}"
+                and species = "{detection.species}"
+                and ({detection.end_time} > start_time or {detection.start_time} < end_time)
+                and {detection.start_time} - end_time < {MIN_TIME_BETWEEN_DETECTIONS}
+                and start_time - {detection.end_time} < {MIN_TIME_BETWEEN_DETECTIONS}
+        """
+
+        self._cur.execute(query)
+
+        # insert a record to detections table if detection is not already included in different record (may happen if message confirmation is not received by a client)
+        query = f"""
+        insert into detections
+        select NULL,
+                "{detection.species}",
+                {detection.confidence},
+                {detection.start_time},
+                {detection.end_time},
+                "{detection.dev_eui}"
+        where not EXISTS(select *
+                         from detections
+                         where dev_eui = "{detection.dev_eui}"
+                           and species = "{detection.species}"
+                           and start_time <= {detection.start_time}
+                           and end_time >= {detection.end_time});
+        """
+
         self._cur.execute(query)
         self._con.commit()
 
@@ -56,6 +87,7 @@ class SqliteConnector:
         group by species
         order by duration desc
         """
+
         res = self._cur.execute(query)
         return [SpeciesDetectionStatModel(*args) for args in res.fetchall()]
 
