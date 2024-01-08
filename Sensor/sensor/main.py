@@ -3,7 +3,7 @@ import time
 from multiprocessing import Process, Queue
 
 from sensor.birdnet_controller import BirdNetController
-from sensor.communication.lora import LoRaConnection
+from sensor.communication.lora_connection import LoRaConnection
 from sensor.communication.http_connection import HTTPConnection
 from sensor.detection import Detection
 from sensor.message_composer import MessageComposer
