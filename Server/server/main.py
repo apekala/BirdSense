@@ -40,7 +40,7 @@ async def upload_detections_from_ttn(request: Request):
 
 
 @app.get('/v1/detections', response_model=list[DetectionModel])
-async def get_all_detections(after: int = 0, before: int = round(time.time()), devEUI='%'):
+async def get_all_detections(after: int = 0, before: int = 2**64, devEUI='%'):
     """
     Get detections data.
     - **after**: unix timestamp, only detections ending after this time will be included
