@@ -11,10 +11,27 @@ class LoRaConnection:
     def __init__(self, port):
         os.system(f'sudo chmod 666 {port}')
         self._ser = serial.Serial(port=port, baudrate=9600, timeout=5)
+        self._set_class()
         self._join()
 
     def _send_AT(self, command: str):
         self._ser.write(bytes(command + '\r\n', "ASCII"))
+
+    def _set_class(self):
+        """
+        set device class to B
+        :return:
+        """
+        self._send_AT('AT+CLASS=B,SAVE')
+        lines = []
+        while not (lines and lines[-1] in [b'+BEACON: LOCKED\r\n', b'+BEACON: DONE\r\n']):
+            if self._ser.in_waiting:
+                line = self._ser.readline()
+                print(line)
+                if line == b'+BEACON: FAILED\r\n':
+                    raise JoinError('class not set')
+                lines.append(line)
+        print("Device class set to B")
 
     def _join(self):
         """
@@ -34,19 +51,19 @@ class LoRaConnection:
 
     def send(self, message, timeout=15):
         """
-        send a message
+        send a message (ACK required)
         :param message: message
         :return:
         """
         start_time = time.time()
 
         logging.info(f'sending msg "{message}"')
-        at = f'AT+MSG="{message}"'
+        at = f'AT+CMSG="{message}"'
         self._send_AT(at)
         lines = []
 
         start_time = time.time()
-        while not (lines and lines[-1] == b'+MSG: Done\r\n'):
+        while not (lines and lines[-1] == b'+CMSG: Done\r\n'):
             if time.time() - start_time > timeout:
                 raise TimeoutError(f"Sending LoRaWan message took more than {timeout} seconds")
             if self._ser.in_waiting:

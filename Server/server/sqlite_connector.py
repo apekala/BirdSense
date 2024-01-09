@@ -93,7 +93,7 @@ class SqliteConnector:
 
     def get_device_info(self, dev_eui: str):
         """
-        Get coordiantes of a device.
+        Get coordinates of a device.
         :param dev_eui: devEUI
         :return: latitude and longitude of the device, None if device does not exist.
         """
