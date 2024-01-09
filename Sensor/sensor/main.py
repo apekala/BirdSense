@@ -3,6 +3,7 @@ import time
 from multiprocessing import Process, Queue
 
 from sensor.birdnet_controller import BirdNetController
+from sensor.communication.lora_connection import LoRaConnection
 from sensor.communication.http_connection import HTTPConnection
 from sensor.detection import Detection
 from sensor.message_composer import MessageComposer
@@ -34,8 +35,8 @@ def analyze(sound_samples, detections):
 def send(detections: Queue):
     MAX_MSG_SIZE = 242
 
-    # lora = LoRaConnection('/dev/ttyUSB0')
-    lora = HTTPConnection()
+    lora = LoRaConnection('/dev/ttyUSB0')
+    # lora = HTTPConnection()
 
     message_composer = MessageComposer(detections, MAX_MSG_SIZE)
 
@@ -48,7 +49,6 @@ def send(detections: Queue):
 if __name__ == '__main__':
     logging.basicConfig(format='%(asctime)s - %(message)s', level=logging.INFO)
 
-    # start analyzer process
     sound_samples = Queue()
     detections = Queue()
 

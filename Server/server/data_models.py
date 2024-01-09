@@ -2,18 +2,6 @@ from dataclasses import dataclass
 
 
 @dataclass
-class UserModel:
-    user_id: int
-    name: str
-
-
-@dataclass
-class DeviceModel:
-    dev_eui: int
-    owner_id: int
-
-
-@dataclass
 class DetectionModel:
     species: str
     confidence: float
@@ -22,5 +10,14 @@ class DetectionModel:
     dev_eui: str
 
 
-if __name__ == '__main__':
-    pass
+@dataclass
+class SpeciesDetectionStatModel:
+    species: str
+    count: int
+    duration: int
+
+
+@dataclass
+class DeviceLocationModel:
+    latitude: float
+    longitude: float
