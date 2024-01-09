@@ -27,7 +27,6 @@ class SqliteConnector:
                 confidence = max({detection.confidence}, confidence)
             where dev_eui = "{detection.dev_eui}"
                 and species = "{detection.species}"
-                and ({detection.end_time} > start_time or {detection.start_time} < end_time)
                 and {detection.start_time} - end_time < {MIN_TIME_BETWEEN_DETECTIONS}
                 and start_time - {detection.end_time} < {MIN_TIME_BETWEEN_DETECTIONS}
         """
@@ -70,7 +69,7 @@ class SqliteConnector:
         """
         # logging.info(f"running query:\n{query}")
         res = self._cur.execute(query)
-        # print(res.fetchall())
+        # print(res.fetchone())
         return [DetectionModel(*args[1:]) for args in res.fetchall()]
 
     def get_detection_stats(self, after: int, before: int, dev_eui: str = "%") -> list[SpeciesDetectionStatModel]:

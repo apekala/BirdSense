@@ -1,7 +1,9 @@
 
 enum ClientPath{
   birds,
-  condition;
+  condition,
+  birdsSort;
+
 
   const ClientPath();
 
@@ -11,27 +13,47 @@ enum ClientPath{
         return 'v1/detections';
       case ClientPath.condition:
         return '';
+      case ClientPath.birdsSort:
+        return 'v1/stats/detections-by-species';
+
+
     }
   }
 
-   Uri get baseUri => Uri.https(
-        'saving-crow-bursting.ngrok-free.app',
+   Uri get baseUri => Uri.http(
+        '130.61.154.206:8000',
         '',
       );
 
-  Uri getUri([String? query]) {
-    if (query == null) {
-      return Uri.https(
+  Uri getUri(String? after, String? before, String? devEUI) {
+      if (after == null) {
+      return Uri.http(
+        baseUri.authority,
+        path,
+        baseUri.queryParameters,
+      );
+      
+    }
+     return Uri.http(
+      baseUri.authority,
+      ClientPath.birds.path,
+      <String, dynamic>{...baseUri.queryParameters, 'after': after, 'before': before, 'devEui': devEUI },
+    );
+  }
+
+   Uri getUriSorted(String? after, String? before, String? devEUI) {
+    if (after == null) {
+      return Uri.http(
         baseUri.authority,
         path,
         baseUri.queryParameters,
       );
     }
 
-    return Uri.https(
+    return Uri.http(
       baseUri.authority,
-      ClientPath.birds.path,
-      <String, dynamic>{...baseUri.queryParameters, 'after': query},
+      ClientPath.birdsSort.path,
+      <String, dynamic>{...baseUri.queryParameters, 'after': after, 'before': before, 'devEui': devEUI },
     );
   }
 }
