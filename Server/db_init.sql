@@ -13,6 +13,7 @@ create table devices
 (
     dev_eui   TEXT    NOT NULL PRIMARY KEY,
     owner     INTEGER NOT NULL,
+    name TEXT NOT NULL,
     latitude  REAL    NOT NULL,
     longitude REAL    NOT NULL,
     CONSTRAINT device_owner_rel FOREIGN KEY (owner) REFERENCES users (user_id)

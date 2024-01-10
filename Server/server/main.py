@@ -49,9 +49,18 @@ async def get_all_detections(after: int = 0, before: int = 2**64, devEUI='%'):
     """
     return db.get_detections(after, before, devEUI)
 
+@app.get('/v1/device-info')
+async def get_all_devices_location() -> list[DeviceLocationModel]:
+    """
+    Get locations of all devices
+    - **devEUI**: devEUI of a device
+    """
+    print(db.get_all_devices_info())
+    return db.get_all_devices_info()
 
-@app.get('/v1/device-location/{dev_eui}')
-async def get_device_location(dev_eui: str):
+
+@app.get('/v1/device-info/{dev_eui}')
+async def get_device_location(dev_eui: str) -> DeviceLocationModel:
     """
     Get location of a device
     - **devEUI**: devEUI of a device

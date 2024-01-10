@@ -19,5 +19,6 @@ class SpeciesDetectionStatModel:
 
 @dataclass
 class DeviceLocationModel:
+    name: str
     latitude: float
     longitude: float
