@@ -97,7 +97,7 @@ class SqliteConnector:
         :return: latitude and longitude of all devices.
         """
         query = f"""
-        select name, latitude, longitude from devices;
+        select dev_eui, name, latitude, longitude from devices;
         """
         res = self._cur.execute(query)
         return [DeviceLocationModel(*args) for args in res.fetchall()]
@@ -109,7 +109,7 @@ class SqliteConnector:
         :return: latitude and longitude of the device, None if device does not exist.
         """
         query = f"""
-        select name, latitude, longitude from devices
+        select dev_eui, name, latitude, longitude from devices
         where dev_eui = "{dev_eui}"
         """
 

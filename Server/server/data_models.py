@@ -19,6 +19,7 @@ class SpeciesDetectionStatModel:
 
 @dataclass
 class DeviceLocationModel:
+    dev_eui: str
     name: str
     latitude: float
     longitude: float
