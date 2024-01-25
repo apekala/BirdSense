@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-
+from pydantic import BaseModel
 
 @dataclass
 class DetectionModel:
@@ -23,3 +23,16 @@ class DeviceLocationModel:
     name: str
     latitude: float
     longitude: float
+
+
+class ArticleUploadModel(BaseModel):
+    header: str
+    article_url: str
+    img_url: str
+
+@dataclass
+class ArticleModel:
+    header: str
+    publish_time: str
+    article_url: str
+    img_url: str

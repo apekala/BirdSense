@@ -1,5 +1,5 @@
 import sqlite3
-
+import time
 from server.data_models import *
 
 
@@ -90,7 +90,6 @@ class SqliteConnector:
         res = self._cur.execute(query)
         return [SpeciesDetectionStatModel(*args) for args in res.fetchall()]
 
-
     def get_all_devices_info(self):
         """
         Get coordiantes of all devices.
@@ -117,3 +116,21 @@ class SqliteConnector:
         if location := res.fetchone():
             return DeviceLocationModel(*location)
         return None
+
+    def insert_article(self, article: ArticleUploadModel):
+        query = f"""
+        INSERT INTO articles (publish_time, header, article_url, img_url)
+        VALUES ({round(time.time())}, "{article.header}","{article.article_url}","{article.img_url}")
+        """
+
+        self._cur.execute(query)
+        self._con.commit()
+
+    def get_articles(self) -> list[ArticleModel]:
+        query = f"""
+        select header, publish_time, article_url, img_url from articles
+        order by publish_time desc
+        """
+        res = self._cur.execute(query)
+        return [ArticleModel(*args) for args in res.fetchall()]
+

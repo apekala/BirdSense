@@ -24,3 +24,11 @@ create table users
     user_id INTEGER PRIMARY KEY AUTOINCREMENT,
     name    TEXT NOT NULL
 );
+
+create table articles(
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    publish_time INTEGER NOT NULL,
+    header TEXT NOT NULL,
+    article_url TEXT NOT NULL,
+    img_url TEXT NOT NULL
+)

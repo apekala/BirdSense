@@ -40,7 +40,7 @@ async def upload_detections_from_ttn(request: Request):
 
 
 @app.get('/v1/detections', response_model=list[DetectionModel])
-async def get_all_detections(after: int = 0, before: int = 2**64, devEUI='%'):
+async def get_all_detections(after: int = 0, before: int = 2 ** 64, devEUI='%'):
     """
     Get detections data.
     - **after**: unix timestamp, only detections ending after this time will be included
@@ -49,7 +49,8 @@ async def get_all_detections(after: int = 0, before: int = 2**64, devEUI='%'):
     """
     return db.get_detections(after, before, devEUI)
 
-@app.get('/v1/device-info')
+
+@app.get('/v1/device-info', response_model=list[DeviceLocationModel])
 async def get_all_devices_location() -> list[DeviceLocationModel]:
     """
     Get locations of all devices
@@ -59,7 +60,7 @@ async def get_all_devices_location() -> list[DeviceLocationModel]:
     return db.get_all_devices_info()
 
 
-@app.get('/v1/device-info/{dev_eui}')
+@app.get('/v1/device-info/{dev_eui}', response_model=DetectionModel)
 async def get_device_location(dev_eui: str) -> DeviceLocationModel:
     """
     Get location of a device
@@ -80,3 +81,13 @@ async def get_detecions_by_species_stats(after: int = 0, before: int = round(tim
     - **devEUI**: devEUI of device from which detections will be included
     """
     return db.get_detection_stats(after, before, devEUI)
+
+
+@app.post('/v1/articles', status_code=201)
+async def post_articles(article: ArticleUploadModel):
+    db.insert_article(article)
+
+
+@app.get('/v1/articles', response_model=list[ArticleModel])
+async def get_articles():
+    return db.get_articles()
