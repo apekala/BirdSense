@@ -7,9 +7,9 @@ class SortedBirdsRepository{
 
   SortedBirdsRepository({required this.client});
 
-  Future<List<SortedBirdsModel>?> getSortedBirds(int after, int before) async{
+  Future<List<SortedBirdsModel>?> getSortedBirds(int after, int before, String devEUI) async{
     try{
-      final model = await client.getSortedBirds(after,before);
+      final model = await client.getSortedBirds(after,before, devEUI);
      
       return model;
     } catch (e){

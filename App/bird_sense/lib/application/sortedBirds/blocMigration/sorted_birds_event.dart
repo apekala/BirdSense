@@ -6,9 +6,10 @@ sealed class SortedMigrationBirdsEvent {}
 class SortedMigrationBirdsCount extends SortedMigrationBirdsEvent{
   final int after;
   final int before;
+  final String devEUI;
   // final DateTime date;
 
-  SortedMigrationBirdsCount({required this.after, required this.before, 
+  SortedMigrationBirdsCount({required this.after, required this.before, required this.devEUI
   
   // required this.date
   });

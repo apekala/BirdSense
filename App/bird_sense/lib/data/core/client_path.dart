@@ -2,7 +2,9 @@
 enum ClientPath{
   birds,
   condition,
-  birdsSort;
+  birdsSort,
+  deviceEUI,
+  articles;
 
 
   const ClientPath();
@@ -15,6 +17,10 @@ enum ClientPath{
         return '';
       case ClientPath.birdsSort:
         return 'v1/stats/detections-by-species';
+      case ClientPath.deviceEUI:
+        return 'v1/device-info';
+      case ClientPath.articles:
+        return 'v1/articles';
 
 
     }
@@ -37,7 +43,7 @@ enum ClientPath{
      return Uri.http(
       baseUri.authority,
       ClientPath.birds.path,
-      <String, dynamic>{...baseUri.queryParameters, 'after': after, 'before': before, 'devEui': devEUI },
+      <String, dynamic>{...baseUri.queryParameters, 'after': after, 'before': before, 'devEUI': devEUI },
     );
   }
 
@@ -53,7 +59,22 @@ enum ClientPath{
     return Uri.http(
       baseUri.authority,
       ClientPath.birdsSort.path,
-      <String, dynamic>{...baseUri.queryParameters, 'after': after, 'before': before, 'devEui': devEUI },
+      <String, dynamic>{...baseUri.queryParameters, 'after': after, 'before': before, 'devEUI': devEUI },
     );
   }
+  Uri getUriDevice() {
+     return Uri.http(
+      baseUri.authority,
+      ClientPath.deviceEUI.path,
+      <String, dynamic>{...baseUri.queryParameters, },
+    );
+  }
+  Uri getUriArticles() {
+     return Uri.http(
+      baseUri.authority,
+      ClientPath.articles.path,
+      <String, dynamic>{...baseUri.queryParameters, },
+    );
+  }
+
 }

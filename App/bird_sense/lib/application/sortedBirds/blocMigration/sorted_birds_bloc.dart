@@ -12,6 +12,7 @@ class SortedMigrationBirdsBloc extends Bloc<SortedMigrationBirdsEvent, SortedMig
     on<SortedMigrationBirdsCount>((event, emit) async{
       final after = event.after;
       final before = event.before;
+      final devEUI = event.devEUI;
       // final date = event.date;
 
       final state = this.state;
@@ -24,7 +25,7 @@ class SortedMigrationBirdsBloc extends Bloc<SortedMigrationBirdsEvent, SortedMig
         emit(SortedMigrationBirdsLoading());
       }
 
-      final birds = await repository.getSortedBirds(after, before);
+      final birds = await repository.getSortedBirds(after, before, devEUI);
       
       if (birds != null){
         

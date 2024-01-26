@@ -15,8 +15,10 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:quiver/time.dart';
 
 class MigrationPage extends StatefulWidget{
+  final String devEUI;
    const MigrationPage( {
     super.key, 
+    required this.devEUI
     });
 @override
   State<MigrationPage> createState() => _MigrationPageState();
@@ -51,6 +53,7 @@ class _MigrationPageState extends State<MigrationPage> with AutomaticKeepAliveCl
 
  @override
   Widget build(BuildContext context) {
+    final devEUI = widget.devEUI;
     super.build(context);
     
     
@@ -58,7 +61,7 @@ class _MigrationPageState extends State<MigrationPage> with AutomaticKeepAliveCl
     return BlocBuilder<SortedMigrationBirdsBloc,SortedMigrationBirdsState>(
       builder:(context, state) {
         final birds = getSortedBirds(from: state);
-             print(birds?.length);
+            
         
         if(state is SortedMigrationBirdsLoaded) {
              for(var i = birds!.length-1; i>=0; i--) {
@@ -149,7 +152,7 @@ class _MigrationPageState extends State<MigrationPage> with AutomaticKeepAliveCl
                                       ),
                                     
                                     ),
-                                    onPressed: () { _onPressed();
+                                    onPressed: () { _onPressed(devEUI: devEUI);
                                     
 
                                     
@@ -169,7 +172,8 @@ class _MigrationPageState extends State<MigrationPage> with AutomaticKeepAliveCl
     );
   }
 
-  Future<void> _onPressed({
+  Future<void> _onPressed(
+    {required final String devEUI,
     //required BuildContext context,
     String? locale,
   }) async {
@@ -190,7 +194,7 @@ class _MigrationPageState extends State<MigrationPage> with AutomaticKeepAliveCl
         after = _selected!.toUtc().millisecondsSinceEpoch / 1000;
         before = (after! + (monthdays! *24 * 60 * 60));
         chartData.clear();
-        context.read<SortedMigrationBirdsBloc>().add(SortedMigrationBirdsCount(after: after!.toInt(), before: before!.toInt()));
+        context.read<SortedMigrationBirdsBloc>().add(SortedMigrationBirdsCount(after: after!.toInt(), before: before!.toInt(),devEUI: devEUI));
 
       });
     }

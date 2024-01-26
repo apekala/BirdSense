@@ -4,32 +4,20 @@ part of 'markers_bloc.dart';
 sealed class MarkersEvent {}
 
 class MarkersCounter extends MarkersEvent{
+  // final LatLng marker;
+
+  // MarkersCounter({   // required this.marker
+    // });
 
 }
 
-class MarkersAdd extends MarkersEvent{
-  final LatLng marker;
 
-  MarkersAdd({required this.marker});
-
-}
-
-class MarkersRemove extends MarkersEvent{
-  final LatLng marker;
-
-  MarkersRemove({required this.marker});
-
-}
 
 class MarkersChange extends MarkersEvent{
   final LatLng marker;
-  final int index;
+  final String devEui;
 
-  MarkersChange({required this.marker, required this.index});
-
-}
-
-class MarkersRefresh extends MarkersEvent{
-
+  MarkersChange({required this.marker, required this.devEui});
 
 }
+

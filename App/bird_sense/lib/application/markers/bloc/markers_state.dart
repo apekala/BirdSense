@@ -6,15 +6,16 @@ sealed class MarkersState {}
 final class MarkersInitial extends MarkersState {}
 
 class MarkersLoading extends MarkersState{
-  final List<LatLng>? last_markers;
+  final LatLng? last_markers;
 
   MarkersLoading({this.last_markers});
 }
 
 class MarkersLoaded extends MarkersState{
-  final List<LatLng> markers;
+  final LatLng markers;
+  final String devEui;
 
-  MarkersLoaded({required this.markers});
+  MarkersLoaded({required this.markers, required this.devEui});
 
   
 }

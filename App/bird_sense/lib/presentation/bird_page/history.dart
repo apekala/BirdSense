@@ -7,10 +7,16 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:syncfusion_flutter_charts/sparkcharts.dart';
+import 'package:flutter/widgets.dart';
 
-class HistoryPage extends HookWidget{
+
+
+
+class HistoryPage extends HookWidget {
+  final String devEUI;
   const HistoryPage({
     super.key, 
+    required this.devEUI
     });
 
      List<SortedBirdsEntity>? getSortedBirds({required SortedBirdsState from}) {
@@ -31,8 +37,10 @@ class HistoryPage extends HookWidget{
 
   @override
   Widget build(BuildContext context) {
+    final alive = useAutomaticKeepAlive(wantKeepAlive: true);
     final List<SalesData> chartData = [];
-    final indexTapped = useState(1);
+    var indexTapped = 1;
+
     
     
     return BlocBuilder<SortedBirdsBloc,SortedBirdsState>(
@@ -44,7 +52,7 @@ class HistoryPage extends HookWidget{
               chartData.add(SalesData(birds[i].species, birds[i].duration,birds[i].count));
               
              }
-             final now = DateTime.now().toUtc().millisecondsSinceEpoch / 1000;
+             final now = DateTime.now().toUtc().millisecondsSinceEpoch / 1000 + DateTime.now().timeZoneOffset.inSeconds;
              const hour = 60*60;
              print(chartData.length.toDouble());
              
@@ -53,68 +61,83 @@ class HistoryPage extends HookWidget{
 
           
           return Stack(
-            children: [SingleChildScrollView(
-              scrollDirection: Axis.vertical,
-              child: SizedBox(
-                height: chartData.length.toDouble()*120 + 50,
-                width: 600,
-                child: SfCartesianChart(
-                  title: ChartTitle(
-                    text: 'Bar of total count and time of recorded birds'
+            children: [
+              
+              chartData.isNotEmpty ? 
+              // SafeArea(
+                // child: 
+                // Builder(
+                //   builder: (controllerContext) {
+                //     return 
+                    SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    child: 
+                    // [
+                      SizedBox(
+                      height: chartData.length.toDouble()*120 + 50,
+                      width: 600,
+                      child: SfCartesianChart(
+                        title: ChartTitle(
+                          text: 'Bar of total count and time of recorded birds'
+                          ),
+                         primaryXAxis: CategoryAxis( 
+                          labelRotation: 0,
+                         labelPlacement: LabelPlacement.betweenTicks,
+                         labelPosition: ChartDataLabelPosition.outside,
+                         labelAlignment: LabelAlignment.center,
+                         labelsExtent: 120,
+                         
+                         ),
+                        primaryYAxis: NumericAxis(minimum: 0, maximum: chartData.isNotEmpty ? birds[0].duration.toDouble() + birds[0].duration.toDouble()/10:20, interval: 10,
+                        isVisible: false),
+                        
+                        tooltipBehavior: TooltipBehavior(enable: true),
+                        
+                        
+                        series: <CartesianSeries<SalesData, String>>[
+                          BarSeries<SalesData, String>(
+                            borderRadius: const BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10)),
+                            dataSource: chartData, 
+                            name: 'Duration',
+                            
+                            
+                            
+                            color: Colors.blue,
+                            dataLabelSettings: const DataLabelSettings(
+                              isVisible: true,
+                              labelPosition: ChartDataLabelPosition.outside,
+                               labelAlignment: ChartDataLabelAlignment.auto
+                            ),
+                            xValueMapper: (SalesData data, _) => data.x, 
+                            yValueMapper: (SalesData data, _) => data.y,
+                            dataLabelMapper: (SalesData data, _) => 'Time: ${data.y.toString()}s',
+                            ),
+                            BarSeries<SalesData, String>(
+                            borderRadius: const BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10)),
+                            dataSource: chartData, 
+                            //  groupName: 'Count',
+                            name: 'Count',
+                            color: Colors.green,
+                            dataLabelSettings: const DataLabelSettings(
+                              isVisible: true,
+                              labelPosition: ChartDataLabelPosition.outside,
+                              // labelAlignment: ChartDataLabelAlignment.outer
+                              ),
+                            xValueMapper: (SalesData data, _) => data.x, 
+                            
+                            yValueMapper: (SalesData data, _) => data.y2,
+                            dataLabelMapper: (SalesData data, _) => 'Count: ${data.y2.toString()}'
+                            ),
+                        ],
+                      
+                      ),
                     ),
-                   primaryXAxis: CategoryAxis( 
-                    labelRotation: 0,
-                   labelPlacement: LabelPlacement.betweenTicks,
-                   labelPosition: ChartDataLabelPosition.outside,
-                   labelAlignment: LabelAlignment.center,
-                   labelsExtent: 120,
-                   
-                   ),
-                  primaryYAxis: NumericAxis(minimum: 0, maximum: chartData.isNotEmpty ? birds[0].duration.toDouble() + birds[0].duration.toDouble()/10:20, interval: 10,
-                  isVisible: false),
-                  
-                  tooltipBehavior: TooltipBehavior(enable: true),
-                  
-                  
-                  series: <CartesianSeries<SalesData, String>>[
-                    BarSeries<SalesData, String>(
-                      borderRadius: const BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10)),
-                      dataSource: chartData, 
-                      name: 'Duration',
-                      
-                      
-                      
-                      color: Colors.blue,
-                      dataLabelSettings: const DataLabelSettings(
-                        isVisible: true,
-                        labelPosition: ChartDataLabelPosition.outside,
-                         labelAlignment: ChartDataLabelAlignment.auto
-                      ),
-                      xValueMapper: (SalesData data, _) => data.x, 
-                      yValueMapper: (SalesData data, _) => data.y,
-                      dataLabelMapper: (SalesData data, _) => 'Time: ${data.y.toString()}s',
-                      ),
-                      BarSeries<SalesData, String>(
-                      borderRadius: const BorderRadius.only(topRight: Radius.circular(10),bottomRight: Radius.circular(10)),
-                      dataSource: chartData, 
-                      //  groupName: 'Count',
-                      name: 'Count',
-                      color: Colors.green,
-                      dataLabelSettings: const DataLabelSettings(
-                        isVisible: true,
-                        labelPosition: ChartDataLabelPosition.outside,
-                        // labelAlignment: ChartDataLabelAlignment.outer
-                        ),
-                      xValueMapper: (SalesData data, _) => data.x, 
-                      
-                      yValueMapper: (SalesData data, _) => data.y2,
-                      dataLabelMapper: (SalesData data, _) => 'Count: ${data.y2.toString()}'
-                      ),
-                  ],
-                
-                ),
-              ),
-            ),
+                    // ]
+                                )
+              //     }
+              //   ),
+              // )
+              :const Center(child: Text('No birds'),),
 
 
              Align(
@@ -126,8 +149,8 @@ class HistoryPage extends HookWidget{
                    GestureDetector(
                     onTap: () {
                       chartData.clear();
-                      indexTapped.value = 1;
-                    context.read<SortedBirdsBloc>().add(SortedBirdsCount(after: (now - hour).toInt(), before: now.toInt()));
+                      indexTapped = 1;
+                    context.read<SortedBirdsBloc>().add(SortedBirdsCount(after: (now - hour).toInt(), before: now.toInt(),devEUI: devEUI));
                    }, child: Container(
                     height: 30,
                     width: 60,
@@ -145,7 +168,7 @@ class HistoryPage extends HookWidget{
                                         3, 3), // changes position of shadow
                                   ),
                                 ],
-                color: indexTapped.value == 1 ? BSColors.buttonColor : BSColors.backgroundColor,
+                color: indexTapped == 1 ? BSColors.buttonColor : BSColors.backgroundColor,
                  ),
                  child: Center(child: Text("1h",
                  style: TextStyle(color: BSColors.textColor),)),
@@ -156,8 +179,8 @@ class HistoryPage extends HookWidget{
                     GestureDetector(
                     onTap: () {
                       chartData.clear();
-                      indexTapped.value = 2;
-                    context.read<SortedBirdsBloc>().add(SortedBirdsCount(after: (now - 4*hour).toInt(), before: now.toInt()));
+                      indexTapped = 2;
+                    context.read<SortedBirdsBloc>().add(SortedBirdsCount(after: (now - 4*hour).toInt(), before: now.toInt(),devEUI: devEUI));
                    }, child: Container(
                     height: 30,
                     width: 60,
@@ -177,7 +200,7 @@ class HistoryPage extends HookWidget{
                                         3, 3), // changes position of shadow
                                   ),
                                 ],
-                color: indexTapped.value == 2 ? BSColors.buttonColor : BSColors.backgroundColor,
+                color: indexTapped == 2 ? BSColors.buttonColor : BSColors.backgroundColor,
                  ),
                  child: Center(child: Text("4h",
                  style: TextStyle(color: BSColors.textColor),)),
@@ -190,8 +213,8 @@ class HistoryPage extends HookWidget{
 
                     onTap: () {
                       chartData.clear();
-                      indexTapped.value = 3;
-                    context.read<SortedBirdsBloc>().add(SortedBirdsCount(after: (now - 8*hour).toInt(), before: now.toInt()));
+                      indexTapped = 3;
+                    context.read<SortedBirdsBloc>().add(SortedBirdsCount(after: (now - 8*hour).toInt(), before: now.toInt(),devEUI: devEUI));
                    }, child: Container(
                     height: 30,
                     width: 60,
@@ -211,7 +234,7 @@ class HistoryPage extends HookWidget{
                                         3, 3), // changes position of shadow
                                   ),
                                 ],
-                color: indexTapped.value == 3 ? BSColors.buttonColor : BSColors.backgroundColor,
+                color: indexTapped == 3 ? BSColors.buttonColor : BSColors.backgroundColor,
                  ),
                  child: Center(child: Text("8h",
                  style: TextStyle(color: BSColors.textColor),)),
@@ -223,8 +246,8 @@ class HistoryPage extends HookWidget{
                      GestureDetector(
                     onTap: () {
                       chartData.clear();
-                      indexTapped.value = 4;
-                    context.read<SortedBirdsBloc>().add(SortedBirdsCount(after: (now - 24*hour).toInt(), before: now.toInt()));
+                      indexTapped = 4;
+                    context.read<SortedBirdsBloc>().add(SortedBirdsCount(after: (now - 24*hour).toInt(), before: now.toInt(),devEUI: devEUI));
                    }, child: Container(
                     height: 30,
                     width: 60,
@@ -244,7 +267,7 @@ class HistoryPage extends HookWidget{
                                         3, 3), // changes position of shadow
                                   ),
                                 ],
-                color: indexTapped.value == 4 ? BSColors.buttonColor : BSColors.backgroundColor,
+                color: indexTapped == 4 ? BSColors.buttonColor : BSColors.backgroundColor,
                  ),
                  child: Center(child: Text("24h",
                  style: TextStyle(color: BSColors.textColor),)),
@@ -256,8 +279,8 @@ class HistoryPage extends HookWidget{
                      GestureDetector(
                     onTap: () {
                       chartData.clear();
-                      indexTapped.value = 5;
-                    context.read<SortedBirdsBloc>().add(SortedBirdsCount(after: (now - 48*hour).toInt(), before: now.toInt()));
+                      indexTapped = 5;
+                    context.read<SortedBirdsBloc>().add(SortedBirdsCount(after: (now - 48*hour).toInt(), before: now.toInt(),devEUI: devEUI));
                    }, child: Container(
                     height: 30,
                     width: 60,
@@ -282,7 +305,7 @@ class HistoryPage extends HookWidget{
                                         3, 3), // changes position of shadow
                                   ),
                                 ],
-                color: indexTapped.value == 5 ? BSColors.buttonColor : BSColors.backgroundColor,
+                color: indexTapped == 5 ? BSColors.buttonColor : BSColors.backgroundColor,
                  ),
                  child: Center(child: Text("48h",
                  style: TextStyle(color: BSColors.textColor),)),
@@ -311,4 +334,67 @@ class SalesData {
     final int y2;
 }
 
+
+void useAutomaticKeepAlive({
+  required bool wantKeepAlive,
+}) =>
+    use(_AutomaticKeepAliveHook(
+      wantKeepAlive: wantKeepAlive ?? true,
+    ));
+
+class _AutomaticKeepAliveHook extends Hook<void> {
+  final bool wantKeepAlive;
+
+  _AutomaticKeepAliveHook({required this.wantKeepAlive});
+
+  @override
+  HookState<void, _AutomaticKeepAliveHook> createState() => _AutomaticKeepAliveHookState();
+}
+
+class _AutomaticKeepAliveHookState extends HookState<void, _AutomaticKeepAliveHook> {
+    KeepAliveHandle? _keepAliveHandle;
+
+  void _ensureKeepAlive() {
+    assert(_keepAliveHandle == null);
+    _keepAliveHandle = KeepAliveHandle();
+    KeepAliveNotification(_keepAliveHandle!).dispatch(context);
+  }
+
+  void _releaseKeepAlive() {
+    _keepAliveHandle!.dispose();
+    _keepAliveHandle = null;
+  }
+
+  void updateKeepAlive() {
+    if (hook.wantKeepAlive) {
+      if (_keepAliveHandle == null) _ensureKeepAlive();
+    } else {
+      if (_keepAliveHandle != null) _releaseKeepAlive();
+    }
+  }
+
+  @override
+  void initHook() {
+    super.initHook();
+    if (hook.wantKeepAlive) _ensureKeepAlive();
+  }
+
+  @override
+  void build(BuildContext context) {
+    if (hook.wantKeepAlive && _keepAliveHandle == null) _ensureKeepAlive();
+    return null;
+  }
+
+  @override
+  void deactivate() {
+    if (_keepAliveHandle != null) _releaseKeepAlive();
+    super.deactivate();
+  }
+
+  @override
+  Object get debugValue => _keepAliveHandle!;
+
+  @override
+  String get debugLabel => 'useAutomaticKeepAlive';
+}
               

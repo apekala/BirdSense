@@ -49,6 +49,9 @@ dependencies:
     sdk: flutter
   quiver: ^3.2.1
   flutter_scroll_to_top: ^2.3.0
+  geocoding: ^2.1.1
+  percent_indicator: ^4.2.3
+  url_launcher: ^6.2.4
   #flutter_osm_plugin: ^0.70.3
   #latlong: ^0.6.1
   #flutter_map: any

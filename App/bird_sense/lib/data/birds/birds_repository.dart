@@ -8,9 +8,9 @@ class ReacentBirdsRepository{
 
   ReacentBirdsRepository({required this.client});
 
-  Future<List<BirdModel>?> getBirds(int after, int before) async{
+  Future<List<BirdModel>?> getBirds(int after, int before, String devEUI) async{
     try{
-      final model = await client.getBirds(after,before);
+      final model = await client.getBirds(after,before, devEUI);
      
       return model;
     } catch (e){

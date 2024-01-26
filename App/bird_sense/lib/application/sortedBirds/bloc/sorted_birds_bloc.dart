@@ -12,6 +12,7 @@ class SortedBirdsBloc extends Bloc<SortedBirdsEvent, SortedBirdsState> {
     on<SortedBirdsCount>((event, emit) async{
       final after = event.after;
       final before = event.before;
+      final devEUI = event.devEUI;
 
       final state = this.state;
 
@@ -20,8 +21,8 @@ class SortedBirdsBloc extends Bloc<SortedBirdsEvent, SortedBirdsState> {
       } else {
         emit(SortedBirdsLoading());
       }
-      
-      final birds = await repository.getSortedBirds(after, before);
+
+      final birds = await repository.getSortedBirds(after, before, devEUI);
       
       if (birds != null){
         
