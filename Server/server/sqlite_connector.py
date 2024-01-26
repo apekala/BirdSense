@@ -24,7 +24,7 @@ class SqliteConnector:
             update detections
             set start_time = min({detection.start_time}, start_time),
                 end_time = max({detection.end_time}, end_time),
-                confidence = max({detection.confidence}, confidence)
+                confidence = confidence * 0.5 + (1-0.5) * {detection.confidence}
             where dev_eui = "{detection.dev_eui}"
                 and species = "{detection.species}"
                 and {detection.start_time} - end_time < {MIN_TIME_BETWEEN_DETECTIONS}
