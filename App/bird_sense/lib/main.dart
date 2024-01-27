@@ -26,10 +26,15 @@ import 'package:latlong2/latlong.dart';
 
 import 'package:month_year_picker/month_year_picker.dart';
 import 'package:provider/provider.dart';
+import 'package:pwa_install/pwa_install.dart';
 
-void main() async {
+Future<void> main() async {
   // final weather = await Client().getArticles();
   // print(weather);
+  // PWAInstall().setup(installCallback: () {
+  //   debugPrint('APP INSTALLED!');
+  // });
+  // print(PWAInstall().installPromptEnabled);
   runApp(
     MultiProvider(providers: [
     Provider(
@@ -68,8 +73,8 @@ void main() async {
                 ),
             
   );
-  final birds = await ArticlesRepository(client: Client(),).getArticles();
-  print('articles: $birds');
+  // final birds = await ArticlesRepository(client: Client(),).getArticles();
+  // print('articles: $birds');
 
   // final birds = await CurrentWeatherRepository(client: WeatherClient(),).getWeather('52.21885, 21.01077');
   // print(birds);
@@ -105,16 +110,19 @@ class MyApp extends HookWidget {
           ],
           child: BlocBuilder<MarkersBloc, MarkersState>(
             builder: (context, state) {
+              
               if (state is MarkersLoaded) {
-                if (state.markers == const LatLng(1, 0)) {
+                if (state.markers == const LatLng(0, 0)) {
                   return const MapInitialPage();
                 } else {
                   return BottomBar(
-                    devEUI: state.devEui, latlong: LatLng(20.21885, 21.01077),//state.markers,
+                    devEUI: state.devEui, latlong: state.markers,//LatLng(21, 20)
                   );
                 }
               } else {
+                // print(PWAInstall().installPromptEnabled);
                 return Scaffold(
+                  
                   backgroundColor: BSColors.backgroundColor,
                 );
               }

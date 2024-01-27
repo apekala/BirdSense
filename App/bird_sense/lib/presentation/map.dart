@@ -117,7 +117,7 @@ class MapPage extends HookWidget {
                       margin:
                           const EdgeInsets.only(left: 20, right: 20, top: 10),
                       alignment: Alignment.centerLeft,
-                      padding: const EdgeInsets.only(left: 15, right: 15),
+                      padding: const EdgeInsets.only(left: 15, right: 5),
                       height: 50,
                       width: double.infinity,
                       decoration: BoxDecoration(
@@ -134,7 +134,7 @@ class MapPage extends HookWidget {
                           ),
                           Text(
                             '${city.value}, ${subCity.value}',
-                            style: const TextStyle(fontSize: 25),
+                            style: const TextStyle(fontSize: 20),
                           ),
                         ],
                       ),

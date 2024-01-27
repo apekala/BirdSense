@@ -40,20 +40,31 @@ class HistoryPage extends HookWidget {
     final alive = useAutomaticKeepAlive(wantKeepAlive: true);
     final List<SalesData> chartData = [];
     var indexTapped = 1;
+    var devEuiOld = '';
 
     
     
     return BlocBuilder<SortedBirdsBloc,SortedBirdsState>(
       builder:(context, state) {
+        final now = DateTime.now().toUtc().millisecondsSinceEpoch / 1000;
+        const hour = 60*60;
+        if(devEuiOld != devEUI){
+          devEuiOld = devEUI;
+          
+          context.read<SortedBirdsBloc>().add(SortedBirdsCount(after: (now - hour).toInt(), before: now.toInt(),devEUI: devEUI));
+
+
+        }
         final birds = getSortedBirds(from: state);
+        
         
         if(state is SortedBirdsLoaded) {
              for(var i = birds!.length-1; i>=0; i--) {
               chartData.add(SalesData(birds[i].species, birds[i].duration,birds[i].count));
               
              }
-             final now = DateTime.now().toUtc().millisecondsSinceEpoch / 1000 + DateTime.now().timeZoneOffset.inSeconds;
-             const hour = 60*60;
+              
+             
              print(chartData.length.toDouble());
              
              

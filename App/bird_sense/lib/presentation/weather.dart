@@ -120,6 +120,7 @@ class WeatherPage extends HookWidget {
               print(stateForecast);
               print(forecast?.length);
               if(markerChoosed != location){
+                location = markerChoosed;
                 context.read<CurrentWeatherBloc>().add( QueryForLocationEvent( location: '${markerChoosed.latitude},${markerChoosed.longitude}'),
                                                             );
                                                         contextForecast
@@ -146,7 +147,7 @@ class WeatherPage extends HookWidget {
                           margin: const EdgeInsets.only(
                               left: 20, right: 20, top: 10),
                           alignment: Alignment.centerLeft,
-                          padding: const EdgeInsets.only(left: 15, right: 15),
+                          padding: const EdgeInsets.only(left: 15, right: 9),
                           height: 50,
                           width: double.infinity,
                           decoration: BoxDecoration(
@@ -156,14 +157,14 @@ class WeatherPage extends HookWidget {
                             children: [
                               const Icon(
                                 Icons.location_on_outlined,
-                                size: 25,
+                                size: 20,
                               ),
                               SizedBox(
                                 width: 8,
                               ),
                               Text(
                                 '${city.value}, ${subCity.value}',
-                                style: const TextStyle(fontSize: 25),
+                                style: const TextStyle(fontSize: 23),
                               ),
                             ],
                           ),

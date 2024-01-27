@@ -9,11 +9,20 @@ pluginManagement {
     settings.ext.flutterSdkPath = flutterSdkPath()
 
     includeBuild("${settings.ext.flutterSdkPath}/packages/flutter_tools/gradle")
-
+    repositories {
+        google()
+        mavenCentral()
+        gradlePluginPortal()
+    }
     plugins {
         id "dev.flutter.flutter-gradle-plugin" version "1.0.0" apply false
     }
 }
+// plugins {
+//     id "dev.flutter.flutter-plugin-loader" version "1.0.0"
+//     id "com.android.application" version "7.4.0" apply false
+//     id "org.jetbrains.kotlin.android" version "1.7.10" apply false
+// }
 
 include ":app"
 

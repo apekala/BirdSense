@@ -60,6 +60,7 @@ class _MigrationPageState extends State<MigrationPage> with AutomaticKeepAliveCl
    
     return BlocBuilder<SortedMigrationBirdsBloc,SortedMigrationBirdsState>(
       builder:(context, state) {
+        
         final birds = getSortedBirds(from: state);
             
         

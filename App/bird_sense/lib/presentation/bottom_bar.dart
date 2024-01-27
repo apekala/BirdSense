@@ -30,7 +30,7 @@ class BottomBar extends HookWidget{
     print(devEUI);
     
     final selectedIndex = useState(0);
-    final now = DateTime.now().toUtc().millisecondsSinceEpoch / 1000 + DateTime.now().timeZoneOffset.inSeconds;
+    final now = DateTime.now().toUtc().millisecondsSinceEpoch / 1000; //+ DateTime.now().timeZoneOffset.inSeconds;
     void onItemTapped(int index) {
       selectedIndex.value = index;
   }

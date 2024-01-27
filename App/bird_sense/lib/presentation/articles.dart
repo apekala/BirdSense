@@ -18,56 +18,61 @@ class ArticlesPage extends HookWidget{
     return BlocBuilder<ArticlesBloc,ArticlesState>(
       builder: (context, state) {
         if(state is ArticlesLoaded){
-          return ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: state.articles?.length,
-            itemBuilder: (context, index){
-              return GestureDetector(
-                onTap: () {
-                  // _launchUrl(Uri.parse(state.articles![index].articleURL));
-                  launchUrlString(state.articles![index].articleURL);
-                },
-                child: Container(
-                  height: 340,
-                  width: 300,
-                  // padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
-                  margin: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
-                  decoration: BoxDecoration(
-                    color: WAColors.primaryColor,
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    // backgroundBlendMode: BlendMode.srcATop
+          return RefreshIndicator(
+            onRefresh: () async{
+              context.read<ArticlesBloc>().add(ArticlesCount());
+            },
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: state.articles?.length,
+              itemBuilder: (context, index){
+                return GestureDetector(
+                  onTap: () {
+                    // _launchUrl(Uri.parse(state.articles![index].articleURL));
+                    launchUrlString(state.articles![index].articleURL);
+                  },
+                  child: Container(
+                    height: 280,
+                    width: 300,
+                    // padding: const EdgeInsets.only(left: 10, right: 10, top: 10, bottom: 10),
+                    margin: const EdgeInsets.only(left: 15, right: 15, top: 15, bottom: 10),
+                    decoration: BoxDecoration(
+                      color: WAColors.primaryColor,
+                      borderRadius: BorderRadius.all(Radius.circular(10)),
+                      // backgroundBlendMode: BlendMode.srcATop
+                    ),
+                    child: Center(
+                      child: Column(
+                        
+                        
+                        children: [
+                        // Text(state.articles![index].articleURL,
+                        // textAlign: TextAlign.center,
+                        // style: const TextStyle(
+                        //   fontSize: 12,
+                        //   decoration: TextDecoration.underline
+                        // ),),
+                        const SizedBox(height: 10,),
+                        Image.network(state.articles![index].imageURL,
+                        width: double.infinity,
+                        height: 200,
+                        // cacheHeight: 150,
+                        ),
+                        const SizedBox(height: 10,),
+                        Text(state.articles![index].header,
+                        textAlign: TextAlign.center,
+                        style: const TextStyle(
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold
+                        ),)
+                      ]),
+                    ),
                   ),
-                  child: Center(
-                    child: Column(
-                      
-                      
-                      children: [
-                      Text(state.articles![index].articleURL,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 12,
-                        decoration: TextDecoration.underline
-                      ),),
-                      const SizedBox(height: 5,),
-                      Image.network(state.articles![index].imageURL,
-                      width: double.infinity,
-                      height: 200,
-                      // cacheHeight: 150,
-                      ),
-                      const SizedBox(height: 5,),
-                      Text(state.articles![index].header,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold
-                      ),)
-                    ]),
-                  ),
-                ),
-              );
-            }
-            
-            );
+                );
+              }
+              
+              ),
+          );
 
         }
 

@@ -10,6 +10,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_scroll_to_top/flutter_scroll_to_top.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:quiver/strings.dart';
 
 
@@ -42,7 +43,7 @@ class ReacentBirds extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    var after =  DateTime.now().toUtc().millisecondsSinceEpoch / 1000 + DateTime.now().timeZoneOffset.inSeconds - 2*24*60*60;
+    var after =  DateTime.now().toUtc().millisecondsSinceEpoch / 1000; //+ DateTime.now().timeZoneOffset.inSeconds - 2*24*60*60;
    
     var loaded = false;
     var  _controller = ScrollController(      
@@ -50,9 +51,11 @@ class ReacentBirds extends HookWidget {
     
      
     var birdsLenght =  0;
+    var devEuiOld = '';
     
     var request = 0;
     var isEmpty = 0;
+    var request2 = 0;
     
     
     var countControler = 0;
@@ -87,23 +90,32 @@ class ReacentBirds extends HookWidget {
 
        return BlocBuilder<ReacentBirdsBloc, ReacentBirdsState>(
       builder: (context, state) {
+        final now = DateTime.now().millisecondsSinceEpoch / 1000; //+ DateTime.now().timeZoneOffset.inSeconds;
         
+        if(devEuiOld != devEUI){
+          devEuiOld = devEUI;
+          context.read<ReacentBirdsBloc>().add(ReacentBirdsCount(after: (now-after).toInt(), before: now.toInt(),devEUI: devEUI));
+
+
+        }
         
         final birds = getBirds3(from: state);
+
         
-        final now = DateTime.now().millisecondsSinceEpoch / 1000 + DateTime.now().timeZoneOffset.inSeconds;
+        
         
         // print('length: ${birds?.length}');
         // print("isEmpty: $isEmpty");
         if(birds?.isNotEmpty ?? false){
            
-            if(birds!.length < 9 || (birdsLenght == birds.length && request < 10)){
+            if((birds!.length < 9 && request2<10) || (birdsLenght == birds.length && request < 10)){
               //  print('b');
               loaded = false;
               
               after = after - 2*24*60*60;
               BlocProvider.of<ReacentBirdsBloc>(context).add(ReacentBirdsCount(after: after.toInt(), before: now.toInt(),devEUI: devEUI));
               request += 1;
+              request2 += 1;
               
           }
           else{

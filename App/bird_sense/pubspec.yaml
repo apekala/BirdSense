@@ -52,6 +52,7 @@ dependencies:
   geocoding: ^2.1.1
   percent_indicator: ^4.2.3
   url_launcher: ^6.2.4
+  pwa_install: ^0.0.5
   #flutter_osm_plugin: ^0.70.3
   #latlong: ^0.6.1
   #flutter_map: any
