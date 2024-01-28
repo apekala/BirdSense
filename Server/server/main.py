@@ -1,4 +1,3 @@
-#  ngrok http  --domain=saving-crow-bursting.ngrok-free.app 127.0.0.1:8000
 import logging
 import time
 
@@ -24,7 +23,6 @@ async def upload_detections_from_ttn(request: Request):
 
     dev_eui = body["end_device_ids"]['dev_eui']
     sensor_data = body['uplink_message']['decoded_payload']['data']
-    # sensor_data = json.loads(sensor_data.replace("'", "\""))
 
     rec_length = 3
     for det in sensor_data:
@@ -85,9 +83,15 @@ async def get_detecions_by_species_stats(after: int = 0, before: int = round(tim
 
 @app.post('/v1/articles', status_code=201)
 async def post_articles(article: ArticleUploadModel):
+    """
+    upload an article:
+    """
     db.insert_article(article)
 
 
 @app.get('/v1/articles', response_model=list[ArticleModel])
 async def get_articles():
+    """
+    Get all articles
+    """
     return db.get_articles()

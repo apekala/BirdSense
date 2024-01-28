@@ -4,11 +4,10 @@ from multiprocessing import Process, Queue
 
 from sensor.birdnet_controller import BirdNetController
 from sensor.communication.lora_connection import LoRaConnection
-from sensor.communication.http_connection import HTTPConnection
+
 from sensor.detection import Detection
 from sensor.message_composer import MessageComposer
 from sensor.microphone_controller import record_sound
-
 
 def analyze(sound_samples, detections):
     lat, lon = 52.21885, 21.01077
@@ -27,22 +26,22 @@ def analyze(sound_samples, detections):
             end_time=int(round(rec_end)))
 
         if result:
-            logging.info(f"detected {[det['label'] for det in analyzer_out]}")
+            logging.info(f"detected {det}")
             detections.put(result)
-            print(result)
 
 
 def send(detections: Queue):
     MAX_MSG_SIZE = 242
 
     lora = LoRaConnection('/dev/ttyUSB0')
-    # lora = HTTPConnection()
 
     message_composer = MessageComposer(detections, MAX_MSG_SIZE)
 
     while True:
         if message := message_composer.compose():
-            lora.send(message)
+            while not lora.send(message, confirmation=True):
+                logging.warning("repeating lora message...")
+
         time.sleep(0.1)
 
 

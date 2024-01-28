@@ -9,7 +9,7 @@ class MessageComposer:
 
     def _dump_detections_queue(self):
         """
-        returns content of a multiprocessing.Queue without exceedeing max message size (bytes).
+        returns content of a multiprocessing.Queue without exceeding max message size (bytes).
         :return:
         """
         res = ''
@@ -17,8 +17,7 @@ class MessageComposer:
             res += self._last_element_buffer
 
         last_element_buffer = None
-        while not (self.detections.empty() or len(
-                res + (last_element_buffer := self.detections.get().to_str())) > self._MAX_MSG_SIZE):
+        while not (self.detections.empty() or len(res + (last_element_buffer := self.detections.get().to_str())) > self._MAX_MSG_SIZE):
             res += last_element_buffer
             last_element_buffer = None
 
