@@ -1,5 +1,6 @@
 import sqlite3
 import time
+
 from server.data_models import *
 
 
@@ -17,6 +18,23 @@ class SqliteConnector:
         :param detection: Detection data.
         """
 
+        # add species to species table if it doesn't exist yet
+        query = f"""
+        insert into species (name)
+        select "{detection.species}"
+        where not exists(select * from species where name="{detection.species}")
+        """
+
+        self._cur.execute(query)
+
+        # det species id
+        query = f"""
+        select species_id from species where name = "{detection.species}" limit 1;
+                """
+
+        res = self._cur.execute(query)
+        species_id = res.fetchone()[0]
+
         MIN_TIME_BETWEEN_DETECTIONS = 60
 
         # update start_time, end_time and accuracy if a species is detected 2 times on a single device in short period of time
@@ -26,7 +44,7 @@ class SqliteConnector:
                 end_time = max({detection.end_time}, end_time),
                 confidence = confidence * 0.5 + (1-0.5) * {detection.confidence}
             where dev_eui = "{detection.dev_eui}"
-                and species = "{detection.species}"
+                and species_id = {species_id}
                 and {detection.start_time} - end_time < {MIN_TIME_BETWEEN_DETECTIONS}
                 and start_time - {detection.end_time} < {MIN_TIME_BETWEEN_DETECTIONS}
         """
@@ -37,7 +55,7 @@ class SqliteConnector:
         query = f"""
         insert into detections
         select NULL,
-                "{detection.species}",
+                "{species_id}",
                 {detection.confidence},
                 {detection.start_time},
                 {detection.end_time},
@@ -45,7 +63,7 @@ class SqliteConnector:
         where not EXISTS(select *
                          from detections
                          where dev_eui = "{detection.dev_eui}"
-                           and species = "{detection.species}"
+                           and species_id = {species_id}
                            and start_time <= {detection.start_time}
                            and end_time >= {detection.end_time});
         """
@@ -62,7 +80,9 @@ class SqliteConnector:
         :return: query result
         """
 
-        query = f"""SELECT * FROM detections
+        query = f"""SELECT name, confidence, start_time, end_time, dev_eui 
+        FROM detections d
+        join species s on d.species_id = s.species_id
         where end_time>{after} and start_time<{before}
         and dev_EUI like "{dev_eui}"
         order by end_time desc
@@ -70,7 +90,7 @@ class SqliteConnector:
         # logging.info(f"running query:\n{query}")
         res = self._cur.execute(query)
         # print(res.fetchone())
-        return [DetectionModel(*args[1:]) for args in res.fetchall()]
+        return [DetectionModel(*args) for args in res.fetchall()]
 
     def get_detection_stats(self, after: int, before: int, dev_eui: str = "%") -> list[SpeciesDetectionStatModel]:
         """
@@ -80,10 +100,12 @@ class SqliteConnector:
         :param dev_eui: devEUI of device from which detections will be included, use '%' to return from all devices
         :return: query result
         """
-        query = f"""select species, count(*) detections_count, sum(end_time - start_time) duration from detections
+        query = f"""select name, count(*) detections_count, sum(end_time - start_time) duration 
+        from detections d
+        join species s on d.species_id = s.species_id
         where end_time>{after} and start_time<{before}
         and dev_EUI like "{dev_eui}"
-        group by species
+        group by s.species_id
         order by duration desc
         """
 
@@ -133,4 +155,3 @@ class SqliteConnector:
         """
         res = self._cur.execute(query)
         return [ArticleModel(*args) for args in res.fetchall()]
-
