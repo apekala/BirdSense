@@ -9,8 +9,6 @@ from sensor.detection import Detection
 from sensor.message_composer import MessageComposer
 from sensor.microphone_controller import record_sound
 
-#aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
-
 def analyze(sound_samples, detections):
     lat, lon = 52.21885, 21.01077
     min_conf = 0.2
