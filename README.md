@@ -31,26 +31,26 @@ Considering the above requirements, we have decided on the following system arch
 - Server: The server with a database collects data from sensors and provides it to the application. Communication between the server and both The Things Network and the mobile application is facilitated through a REST API.
 - Mobile app: The application enables users to display and analyze data from sensors.
 
-## Hardware
+# Hardware
 The device records sound and identifies bird species present in it.
 
 The central unit is equipped with a Raspberry Pi as the main processing unit, a microphone, and an atmospheric conditions sensor. Solar panels connected via a solar energy management module serve as the power source. The unit sends data through a LoRa module.
 
-### Central unit
+## Central unit
 The central unit utilizes a Raspberry Pi as the main processing unit. It provides ample computational power and flexibility for running the necessary algorithms for bird species recognition.
 
-### Microphone
+## Microphone
 We chose a MEMS microphone due to its miniature size and various interface options. Our project utilizes the $I^2S$ interface on the Raspberry Pi for seamless integration.
 
-### LoRaWAN module
+## LoRaWAN module
 We opted for LoRaWAN communication due to its long-range capabilities and low power consumption. The LoRa-E5 module serves as our LoRaWAN solution.
 
-### Power supply
+## Power supply
 Currently the device is powered by a USB-C charger.
 
-## Communication
+# Communication
 
-### LoRaWAN
+## LoRaWAN
 To transmit data from the measurement devices to the server, we use LoRaWAN and HTTP protocols. We opted for LoRaWAN due to its long communication range (up to 15 km) and the ability to utilize a private gateway to extend network coverage, which is crucial as our devices will often be deployed in forests where public network coverage may be lacking.
 
 We connect the devices to The Things Network, which consists of numerous gateways worldwide. This network allows for the attachment of private gateways to expand coverage. Data received from the sensors will be transmitted to our server via the HTTP protocol.
@@ -63,35 +63,35 @@ After sending a message, the device waits for confirmation of receipt. In case o
 
 In the final implementation, we plan to provide users with device configuration options to work with other networks or their own gateway.
 
-## Software
+# Software
 
-### Raspberry Pi
+## Raspberry Pi
 
 We developed the software for the measurement device in Python, utilizing the multiprocessing library to ensure concurrency for simultaneous sound recording, analysis, and data transmission.
 
-#### BirdNET
+### BirdNET
 
 For sound analysis, we utilize the convolutional neural network BirdNet created by the Cornell Lab of Ornithology and Chemnitz University of Technology. This solution allows for the recognition of the largest number of bird species worldwide with high accuracy.
 
-### The Things Network
+## The Things Network
 We developed a custom TTN payload formatter to convert binary data to JSON format used in our REST API.
 
-### Server
+## Server
 
-#### Fast API
+### Fast API
 
 We use a server programmed in Python using the FastAPI framework. We utilize an SQLite database for storage. Communication with the server follows REST API standards.
 
 Sensors can connect to our server (most likely, we would utilize some cloud-based solution) or with users' private devices (we would provide server software).
 
-#### Database
+### Database
 
 We utilize an SQLite database consisting of three tables: detections, devices, and users.
 
 To identify the measurement device, we use the unique devEUI number of the LoRaWAN module. From the measurement devices to the server, we only transmit the end time of the recording, while the start time is calculated based on the known constant recording time. In case of multiple detections of the same bird species in a short period, the end time is updated, and the confidence is calculated using a moving average formula. This solution reduces the amount of stored data and speeds up data retrieval from the database.
 
 
-## Mobile Application
+# Mobile Application
 
 For displaying data, we use a mobile application. This solution is aimed at users of our device who can easily access data while in the middle of the forest.
 
