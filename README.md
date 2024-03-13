@@ -1,5 +1,16 @@
 # BirdSense
 ![BirdSense](<img/PBL3_logo_ z napisem bez tła papuga.png>)
+
+# Table of Contents
+
+- [About](#about)
+- [System Architecture](#system-architecture)
+- [Hardware](#hardware)
+- [Communication](#communication)
+- [Software](#software)
+- [Mobile Application](#mobile-application)
+
+# BirdSense
 ## About
 ### Problem
 
@@ -98,4 +109,3 @@ Depending on the selected device and its location, weather information is displa
 
 The last and most interesting page is the articles page. Interesting facts are fetched from a server where only selected articles are stored.
 
-## Setup
