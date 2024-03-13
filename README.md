@@ -98,15 +98,4 @@ Depending on the selected device and its location, weather information is displa
 
 The last and most interesting page is the articles page. Interesting facts are fetched from a server where only selected articles are stored.
 
-![alt text](img/aplikacja/pogoda1.jpg)
-![alt text](img/aplikacja/zmiana_urzadzenia.jpg)
-![alt text](img/aplikacja/Strona_wyboru_urządzenia.jpg)
-![alt text](img/aplikacja/Artykuly.jpg)
-![alt text](img/aplikacja/Migracje.jpg)
-![alt text](img/aplikacja/pogoda2.jpg)
-![alt text](img/aplikacja/ostatnie_ptaki.jpg)
-![alt text](img/aplikacja/ostatnie_ptaki_aplikacja.png)
-![alt text](img/aplikacja/Historia.jpg)
-
 ## Setup
-
