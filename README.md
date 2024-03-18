@@ -103,9 +103,29 @@ After selecting the device, the application displays a page with birds. On the f
 
 Subsequent pages display charts showing the number of detected birds and the total time birds were heard. On one page, the charts can be displayed based on the month, and on the next page, based on recent history.
 
+<p align="center">
+<img src="./img/aplikacja/Strona_wyboru_urządzenia.jpg" alt="Strona_wyboru_urządzenia" width="200"/>
+
+<img src="./img/aplikacja/ostatnie_ptaki.jpg" alt="ostatnie_ptaki" width="200"/>
+
+<img src="./img/aplikacja/Migracje.jpg" alt="Migracje" width="200"/>
+</p>
+
 Device selection can also be changed. The selected device is displayed in a different color, and the device location name is shown.
 
 Depending on the selected device and its location, weather information is displayed on the next page. An internet weather server, weatherapi.com, is used for this purpose. Current weather conditions, as well as hourly and multi-day forecasts, are displayed.
 
+<p align="center">
+<img src="./img/aplikacja/zmiana_urzadzenia.jpg" alt="zmiana_urzadzenia" width="200"/>
+
+<img src="./img/aplikacja/pogoda1.jpg" alt="pogoda1" width="200"/>
+
+<img src="./img/aplikacja/pogoda2.jpg" alt="pogoda2" width="200"/>
+</p>
+
 The last and most interesting page is the articles page. Interesting facts are fetched from a server where only selected articles are stored.
+
+<p align="center">
+<img src="./img/aplikacja/Artykuly.jpg" alt="Artykuly" width="200"/>
+</p>
 
