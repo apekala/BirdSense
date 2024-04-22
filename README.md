@@ -1,5 +1,8 @@
 # BirdSense
-![BirdSense](<img/PBL3_logo_ z napisem bez tła papuga.png>)
+
+<p align="center">
+  <img width="460" src="img/PBL3_logo_ z napisem bez tła papuga.png">
+</p>
 
 # Table of Contents
 
