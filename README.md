@@ -17,7 +17,7 @@
 ## About
 ### Problem
 
-Monitoring bird populations currently requires the work of specialists and enthusiasts, which is a time-consuming solution. Additionally, there is a shortage of trained individuals for this task.Our project focuses on implementing a network of sensors to monitor bird species appearing in a specific area during certain periods. The project targets foresters and ornithologists due to its potential applications in monitoring endangered species and observing bird migrations. Furthermore, the solution serves as an excellent tool for hobbyists.
+Monitoring bird populations currently requires the work of specialists and enthusiasts, which is a time-consuming solution. Additionally, there is a shortage of trained individuals for this task. Our project focuses on implementing a network of sensors to monitor bird species appearing in a specific area during certain periods. The project targets foresters and ornithologists due to its potential applications in monitoring endangered species and observing bird migrations. Furthermore, the solution serves as an excellent tool for hobbyists.
 
 ### Our solution
 
