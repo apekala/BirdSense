@@ -25,9 +25,48 @@ We aim to create a system capable of monitoring bird activity in a designated ar
 
 ### System architecture
 
-![Architecture schema](img/schematy/schematPolaczen.png)
-
 Considering the above requirements, we have decided on the following system architecture:
+```mermaid
+block-beta
+  columns 4
+
+  %% Row 1: Database (Top Right)
+  space:3
+  db[("<font color='black'>Database</font>")]
+
+  %% Vertical Spacer Row
+  space:4
+
+  %% Row 2: Cloud (Left) and Server (Right)
+  ttn{{"<font color='black'>The Things Network</font>"}}:3
+  server["<font color='black'>Server</font>"]
+
+  %% Vertical Spacer Row
+  space:4
+
+  %% Row 3: Sensors (Left) and Smartphone (Right)
+  s1(["<font color='black'>Sensor</font>"])
+  s2(["<font color='black'>Sensor</font>"])
+  s3(["<font color='black'>Sensor</font>"])
+  phone(["<font color='black'>Smartphone</font>"])
+
+  %% Logical Connections with Arrows
+  ttn --> s1
+  ttn --> s2
+  ttn --> s3
+  db --> server
+  server --> phone
+  ttn --> server
+
+  %% Color Styling
+  style db fill:#EF9A9A,stroke:#C62828
+  style server fill:#FFB74D,stroke:#F57C00
+  style ttn fill:#90CAF9,stroke:#1E88E5
+  style s1 fill:#4CAF50,stroke:#2E7D32
+  style s2 fill:#4CAF50,stroke:#2E7D32
+  style s3 fill:#4CAF50,stroke:#2E7D32
+  style phone fill:#FFFFFF,stroke:#000000
+```
 - Sensors: Positioned in the field, these sensors record sound and analyze it to recognize the species of recorded birds.
 - Data Transmission: Sensor data is transmitted using the LoRaWAN protocol to a server. We utilize The Things Network.
 - Transmitted Data: The transmitted data includes the recognized bird species, the recording end time, and the confidence coefficient.
