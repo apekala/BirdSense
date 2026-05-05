@@ -51,12 +51,12 @@ block-beta
   phone(["<font color='black'>Smartphone</font>"])
 
   %% Logical Connections with Arrows
-  ttn --> s1
-  ttn --> s2
-  ttn --> s3
-  db --> server
-  server --> phone
-  ttn --> server
+  s1 --- ttn
+  s2 --- ttn
+  s3 --- ttn
+  server --- db
+  server --- phone
+  ttn --- server
 
   %% Color Styling
   style db fill:#EF9A9A,stroke:#C62828
